@@ -1,7 +1,8 @@
 import openai
+import os
 
 def write_script(key, theme):
-    openai.api_key = key
+    print("Writing video script...\n\n")
 
     model_engine = "text-davinci-003"
     prompt = f'Write a bullet Script from TikTok video about "{theme}"'
@@ -16,6 +17,9 @@ def write_script(key, theme):
     )
 
     response = completion.choices[0].text
+
+    save_script(theme, response)
+
     return parse_text(response)
 
 
@@ -23,3 +27,10 @@ def write_script(key, theme):
 def parse_text(text):
     text = text.replace("\n", "")
     return text.split("• ")[1:]
+
+
+
+def save_script(theme, text):
+    f = open(f"projects/scripts/{theme.replace(' ', '-')}.txt", "w")
+    f.write(text)
+    f.close()
