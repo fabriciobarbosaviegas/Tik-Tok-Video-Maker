@@ -14,19 +14,19 @@ def generate_video(path, theme):
     create_video(path, theme)
 
     print("Adding audio from video...\n")
-    add_audio_to_video(path.replace("images", "audios"), theme)
+    add_audio_to_video(f"../../audios/{theme}", theme)
 
 
 
 def create_video(path, theme):
-    image_folder = f'../../images/{theme}' # Use the folder
+    image_folder = f'../../images/{theme}'
     video_name = f"{theme}-mute.avi"
     os.chdir(path.replace("images", "videos"))
     images = []
     
     for img in os.listdir(image_folder):
         if img.endswith(".jpg"):
-            for i in range(frame_size(img.replace('.jpg', ''), path.replace("images", "audios"))):
+            for i in range(frame_size(img.replace('.jpg', ''), f"../../audios/{theme}")):
                 images.append(img)
 
     fourcc = cv2.VideoWriter_fourcc(*'DIVX') 
