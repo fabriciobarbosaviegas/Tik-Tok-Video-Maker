@@ -20,13 +20,16 @@ def write_script(key, theme):
 
     save_script(theme, response)
 
-    return parse_text(response)
+    return parse_text(response, theme)
 
 
 
-def parse_text(text):
+def parse_text(text, theme):
     text = text.replace("\n", "")
-    return text.split("• ")[1:]
+    text = text.split("• ")[1:]
+    text.insert(0, theme)
+
+    return text
 
 
 
