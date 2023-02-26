@@ -3,6 +3,7 @@ from PIL import Image, ImageDraw, ImageFilter
 import os
 import requests
 from utils import get_file_number
+from unidecode import unidecode
 
 
 
@@ -38,7 +39,7 @@ def generate_image(prompt, theme=''):
 def save_image(image, theme):
     adjusted_image = adjust_image(image)
 
-    path = os.path.join("projects/images", theme.replace(' ', '-'))
+    path = os.path.join("projects/images", unidecode(theme.replace(' ', '-')))
     
     if not os.path.exists(path):
         os.mkdir(path)
