@@ -4,8 +4,6 @@ from robots.image import generate_image
 from robots.audio import generate_audio, merge_audios
 from robots.video import generate_video
 from unidecode import unidecode
-import vlc
-import time
 import os
 
 
@@ -15,14 +13,9 @@ def main():
 
     init_credentials(api_key)
 
-    script = write_script(api_key, theme)
+    cleanAllPaths(theme)
 
-    try:
-        cleanPath(f"projects/images/{unidecode(theme.replace(' ', '-'))}")
-        cleanPath(f"projects/audios/{unidecode(theme.replace(' ', '-'))}")
-        cleanPath(f"projects/videos/{unidecode(theme.replace(' ', '-'))}")
-    except:
-        pass
+    script = write_script(api_key, theme)
 
     generate_video_assets(script, theme)
 
@@ -36,6 +29,18 @@ def generate_video_assets(prompts, theme):
     for prompt in prompts:
         generate_image(prompt, theme)
         generate_audio(prompt, theme)
+
+
+
+def cleanAllPaths(theme):
+    
+    try:
+        cleanPath(f"projects/images/{unidecode(theme.replace(' ', '-'))}")
+        cleanPath(f"projects/audios/{unidecode(theme.replace(' ', '-'))}")
+        cleanPath(f"projects/videos/{unidecode(theme.replace(' ', '-'))}")
+    except:
+        pass
+
 
 
 def cleanPath(path):
