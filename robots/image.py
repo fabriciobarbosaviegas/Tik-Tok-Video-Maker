@@ -2,6 +2,7 @@ import openai
 from PIL import Image, ImageDraw, ImageFilter
 import os
 import requests
+from utils import get_file_number
 
 
 
@@ -43,7 +44,7 @@ def save_image(image, theme):
         os.mkdir(path)
 
 
-    adjusted_image.save(f"{path}/{get_image_number(path)}.jpg", "JPEG")
+    adjusted_image.save(f"{path}/{get_file_number(path)}.jpg", "JPEG")
 
 
 
@@ -71,19 +72,3 @@ def insert_image(background_image, image):
     insert_image_y = 320
 
     background_image.paste(insert_image_content, (insert_image_x, insert_image_y), insert_image_content)
-
-
-
-def get_image_number(dir_path):
-    count = 0
-
-    try:
-
-        for path in os.listdir(dir_path):
-            
-            if os.path.isfile(os.path.join(dir_path, path)):
-                count += 1
-
-        return count + 1
-    except:
-        return count
