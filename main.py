@@ -1,7 +1,11 @@
 from credentials.init import init_credentials
 from robots.text import write_script
 from robots.image import generate_image
-from robots.audio import generate_audio
+from robots.audio import generate_audio, merge_audios
+from robots.video import generate_video
+from unidecode import unidecode
+import vlc
+import time
 import os
 
 
@@ -14,12 +18,17 @@ def main():
     script = write_script(api_key, theme)
 
     try:
-        cleanPath(f"projects/images/{theme.replace(' ', '-')}")
-        cleanPath(f"projects/audios/{theme.replace(' ', '-')}")
+        cleanPath(f"projects/images/{unidecode(theme.replace(' ', '-'))}")
+        cleanPath(f"projects/audios/{unidecode(theme.replace(' ', '-'))}")
+        cleanPath(f"projects/videos/{unidecode(theme.replace(' ', '-'))}")
     except:
         pass
-    
+
     generate_video_assets(script, theme)
+
+    merge_audios(f"projects/audios/{unidecode(theme.replace(' ', '-'))}")
+
+    generate_video(f"projects/images/{unidecode(theme.replace(' ', '-'))}", unidecode(theme.replace(' ', '-')))
 
 
 
