@@ -1,9 +1,11 @@
 import openai
-from PIL import Image, ImageDraw, ImageFilter
+from PIL import Image, ImageDraw, ImageFilter, ImageFont
 import os
 import requests
 from utils import get_file_number
 from unidecode import unidecode
+import re
+import math
 
 
 
@@ -22,7 +24,7 @@ def generate_image(prompt, theme=''):
 
             image_content = response['data'][0]['url']
 
-            save_image(image_content, theme)
+            save_image(image_content, theme, prompt)
 
             print(f"Generated Image: {image_content}\n")
 
@@ -36,8 +38,8 @@ def generate_image(prompt, theme=''):
 
 
 
-def save_image(image, theme):
-    adjusted_image = adjust_image(image)
+def save_image(image, theme, text):
+    adjusted_image = adjust_image(image, text)
 
     path = os.path.join("projects/images", unidecode(theme.replace(' ', '-')))
     
@@ -49,9 +51,10 @@ def save_image(image, theme):
 
 
 
-def adjust_image(image):
-    background_image = create_background_image(image)
+def adjust_image(image, text):
+    background_image, draw = create_background_image(image)
     insert_image(background_image, image)
+    insert_subtitles(draw, text)
 
     return background_image
 
@@ -62,7 +65,7 @@ def create_background_image(image):
 
     draw = ImageDraw.Draw(background_image)
 
-    return background_image
+    return background_image, draw
 
 
 
@@ -73,3 +76,58 @@ def insert_image(background_image, image):
     insert_image_y = 320
 
     background_image.paste(insert_image_content, (insert_image_x, insert_image_y), insert_image_content)
+
+
+
+def insert_subtitles(draw, text):
+    font = ImageFont.truetype("projects/fonts/ComicNeue-BoldItalic.ttf", 40)
+    text = addBreakLines(text)
+
+    text_width, text_height = draw.textsize(text, font=font)
+
+    print(text_width)
+
+    x = round((720 - text_width) / 2)
+    draw.multiline_text((x, 898), text, font=font, fill="black", align="center")
+    draw.multiline_text((x, 900), text, font=font, fill="yellow", align="center")
+
+
+
+def addBreakLines(text, limit=20):
+
+    index = getAllIndicesOf(" ", text)
+    correctSpaces = ""
+    c = 1
+
+    if len(text) > limit:
+
+        for i in range(math.ceil(len(text)/limit) - 1):
+
+            for j in range(len(index)):
+
+                if index[j] >= limit * c and i <= round(len(text)/limit):
+
+                    correctSpaces = index[j-1]
+                    break
+
+            c += 1
+
+            try:
+                text = text[:correctSpaces] + "\n" + text[correctSpaces:]
+            except:
+                pass
+            
+            index = getAllIndicesOf(" ", text)
+
+        if text.find('\n\n') > 0:
+            text = text.replace('\n\n', '\n')
+
+        return text
+
+    else:
+        return text
+    
+
+
+def getAllIndicesOf(search, searchString):
+    return [m.start() for m in re.finditer(search, searchString)]
