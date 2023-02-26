@@ -1,6 +1,7 @@
 from credentials.init import init_credentials
 from robots.text import write_script
 from robots.image import generate_image
+from robots.audio import generate_audio
 import os
 
 
@@ -12,20 +13,20 @@ def main():
 
     script = write_script(api_key, theme)
 
-    path = os.path.join("projects/images", theme.replace(' ', '-'))
+    try:
+        cleanPath(f"projects/images/{theme.replace(' ', '-')}")
+        cleanPath(f"projects/audios/{theme.replace(' ', '-')}")
+    except:
+        pass
     
-    if not os.path.exists(path):
-        os.mkdir(path)
-    else:
-        cleanPath(path)
-
-    generate_images(script, theme)
+    generate_video_assets(script, theme)
 
 
 
-def generate_images(prompts, theme):
+def generate_video_assets(prompts, theme):
     for prompt in prompts:
         generate_image(prompt, theme)
+        generate_audio(prompt, theme)
 
 
 def cleanPath(path):
