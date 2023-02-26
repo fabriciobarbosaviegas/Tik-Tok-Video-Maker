@@ -14,7 +14,12 @@ def generate_video(path, theme):
     create_video(path, theme)
 
     print("Adding audio from video...\n")
-    add_audio_to_video(f"../../audios/{theme}", theme)
+    
+    videoclip = add_audio_to_video(f"../../audios/{theme}", theme)
+
+    print("Saving video...")
+
+    videoclip.write_videofile(f"../../videos/{theme}/{theme}.mp4")
 
 
 
@@ -55,5 +60,4 @@ def add_audio_to_video(path, theme):
     clip = VideoFileClip(f"{path.replace('audios', 'videos')}/{theme}-mute.avi")
     audioclip = AudioFileClip(f"{path}/final.mp3")
 
-    videoclip = clip.set_audio(audioclip)
-    videoclip.write_videofile(f"{path.replace('audios', 'videos')}/{theme}.mp4")
+    return clip.set_audio(audioclip)
