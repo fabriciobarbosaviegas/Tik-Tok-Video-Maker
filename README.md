@@ -1,7 +1,7 @@
 # Tik Tok Video Maker
  Final Project from CS50
  
-#### Video Demo:  <URL HERE>
+#### Video Demo:  <[https://www.youtube.com/watch?v=ioQQLZUt5F8](https://www.youtube.com/watch?v=ioQQLZUt5F8)>
 
 ## Description:
 
