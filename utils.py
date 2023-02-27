@@ -3,6 +3,17 @@ import unidecode
 
 
 
+def create_projects_path():
+    print("Creating project paths...\n")
+    
+    project_paths = ["projects", "projects/audios", "projects/images", "projects/scripts", "projects/videos", "projects/fonts"]
+
+    for path in project_paths:
+        if not os.path.exists(path):
+            os.mkdir(path)
+
+
+
 def get_file_number(dir_path):
     count = 0
 
