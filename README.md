@@ -7,7 +7,7 @@
 
 ### The Project:
 
-O TikTok video maker é uma aplicação desenvolvida em python que utiliza uma combinação unica de diversas I.As e bots para gerar vídeos curtos completamente originais no formato 4:3 próprio do TikTok.
+TikTok video maker is an application developed in python that uses a unique combination of several AIs and bots to generate completely original short videos in TikTok's own 4:3 format.
 
 ## Examples:
 
