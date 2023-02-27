@@ -1,6 +1,8 @@
 import openai
 import os
 
+
+
 def write_script(key, theme):
     print("Writing video script...\n\n")
 
@@ -18,9 +20,26 @@ def write_script(key, theme):
 
     response = completion.choices[0].text
 
+    print(f"Sugested Keywords: {get_keywords(response)}\n")    
+
     save_script(theme, response)
 
     return parse_text(response, theme)
+
+
+
+def get_keywords(text):
+    response = openai.Completion.create(
+        model="text-davinci-003",
+        prompt=f"Extract keywords from this text:\n\n{text}",
+        temperature=0.5,
+        max_tokens=60,
+        top_p=1,
+        frequency_penalty=0.8,
+        presence_penalty=0
+    )
+
+    return response.choices[0].text
 
 
 
