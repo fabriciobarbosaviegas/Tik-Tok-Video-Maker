@@ -5,7 +5,7 @@ from robots.audio import generate_audio, merge_audios
 from robots.video import generate_video
 from unidecode import unidecode
 import os
-from utils import cleanAllPaths
+from utils import cleanAllPaths, create_projects_path
 
 
 
@@ -15,6 +15,7 @@ def main():
 
     init_credentials(api_key)
 
+    create_projects_path()
     cleanAllPaths(theme)
 
     script = write_script(api_key, theme)
