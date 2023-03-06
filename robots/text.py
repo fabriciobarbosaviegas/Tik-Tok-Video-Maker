@@ -1,26 +1,30 @@
 import openai
 import os
+from langdetect import detect
 
 
 
 def write_script(key, theme):
     print("Writing video script...\n\n")
 
-    model_engine = "text-davinci-003"
-    prompt = f'Write a bullet Script from TikTok video about "{theme}"'
+    messages = [
+        {"role": "system", "content": "You are a useful assistant to help with all the processes involved in creating a video for TikTok"},
+        {"role":"user", "content":f'Write a bullet Script from TikTok video about "{theme}" in {detect(theme)} language'}
+        ]
 
-    completion = openai.Completion.create(
-        engine=model_engine,
-        prompt=prompt,
-        max_tokens=1024,
-        n=1,
-        stop=None,
-        temperature=0.5,
+    completion = openai.ChatCompletion.create(
+    model="gpt-3.5-turbo",
+    messages=messages
     )
 
-    response = completion.choices[0].text
 
-    print(f"Sugested Keywords: {get_keywords(response)}\n")    
+    response = completion.choices[0].message["content"]
+
+    messages.append({"role":"system", "content":response})
+
+    print(response)
+
+    print(f"Sugested Keywords: {get_keywords(messages)}\n")    
 
     save_script(theme, response)
 
@@ -28,24 +32,21 @@ def write_script(key, theme):
 
 
 
-def get_keywords(text):
-    response = openai.Completion.create(
-        model="text-davinci-003",
-        prompt=f"Extract keywords from this text:\n\n{text}",
-        temperature=0.5,
-        max_tokens=60,
-        top_p=1,
-        frequency_penalty=0.8,
-        presence_penalty=0
+def get_keywords(messages):
+    messages.append({"role":"user", "content":"Get perfect keywords for this video"})
+    
+    completion = openai.ChatCompletion.create(
+    model="gpt-3.5-turbo",
+    messages=messages
     )
 
-    return response.choices[0].text
+    return completion.choices[0].message["content"]
 
 
 
 def parse_text(text, theme):
     text = text.replace("\n", "")
-    text = text.split("• ")[1:]
+    text = text.split("- ")[1:]
     text.insert(0, theme)
 
     return text
