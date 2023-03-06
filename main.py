@@ -10,7 +10,7 @@ from utils import cleanAllPaths, create_projects_path
 
 
 def main():
-    api_key = input("Open AI Api Key:")
+    api_key = "API KEY"
     theme = input("Video Theme: ")
 
     init_credentials(api_key)
